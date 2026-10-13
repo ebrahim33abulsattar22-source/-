@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أحمد حجاج بياخد فيها 🏎️ - النسخة الكوميدية الفاخرة</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-fast': 'bounce 0.4s infinite',
+                        'wiggle': 'wiggle 0.2s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 1.5s infinite',
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-6deg)' },
+                            '50%': { transform: 'rotate(6deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 1, filter: 'drop-shadow(0 0 15px rgba(245, 158, 11, 0.8))' },
+                            '50%': { opacity: 0.8, filter: 'drop-shadow(0 0 5px rgba(245, 158, 11, 0.3))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        canvas {
+            touch-action: none;
+        }
+        .pop-card {
+            box-shadow: 0 10px 0 #0f172a, 0 15px 25px rgba(0,0,0,0.5);
+        }
+        .btn-pop {
+            box-shadow: 0 6px 0 #92400e;
+            transition: all 0.1s ease;
+        }
+        .btn-pop:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #92400e;
+        }
+        .btn-nitro {
+            box-shadow: 0 6px 0 #991b1b;
+        }
+        .btn-nitro:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #991b1b;
+        }
+    </style>
+</head>
+<body class="bg-amber-400 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col items-center justify-between transition-colors duration-300 pb-6">
+
+    <header class="w-full max-w-md mx-auto p-3 flex items-center justify-between border-b-4 border-slate-900 bg-amber-300 dark:bg-slate-900 sticky top-0 z-50 shadow-lg">
+        <div class="flex items-center gap-2">
+            <div class="w-12 h-12 rounded-2xl bg-rose-500 border-2 border-slate-900 flex items-center justify-center text-white text-2xl animate-bounce-fast shadow-md">
+                🤪
+            </div>
+            <div>
+                <h1 class="font-black text-lg text-slate-900 dark:text-amber-400 leading-tight">أحمد حجاج بياخد فيها!</h1>
+                <p class="text-[11px] font-bold text-rose-600 dark:text-rose-400">سواق الهوا بأصوله 😂🏎️</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+            <button id="soundToggle" onclick="toggleSound()" class="w-10 h-10 rounded-xl bg-slate-900 text-amber-400 font-bold flex items-center justify-center border-2 border-slate-900 shadow active:scale-95">
+                <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+            </button>
+            <button onclick="openConfigModal()" class="px-2.5 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-black border-2 border-slate-900 shadow active:scale-95 flex items-center gap-1">
+                <i class="fa-solid fa-face-laugh-squint"></i>
+                <span>الصورة</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="w-full max-w-md mx-auto px-3 my-2 flex-grow flex flex-col justify-center space-y-3">
+        
+        <!-- Stats Dashboard -->
+        <div class="grid grid-cols-4 gap-1.5 bg-slate-900 text-white border-4 border-slate-900 rounded-2xl p-2.5 text-center pop-card">
+            <div class="bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                <span class="text-[10px] text-amber-400 block font-bold">النقاط 🏆</span>
+                <span id="score" class="font-black text-amber-300 text-base">0</span>
+            </div>
+            <div class="bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                <span class="text-[10px] text-emerald-400 block font-bold">الأعلى 👑</span>
+                <span id="highScore" class="font-black text-emerald-300 text-base">0</span>
+            </div>
+            <div class="bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                <span class="text-[10px] text-rose-400 block font-bold">المحاولات ❤️</span>
+                <span id="lives" class="font-black text-rose-400 text-base">3</span>
+            </div>
+            <div class="bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                <span class="text-[10px] text-yellow-400 block font-bold">الشاي ☕</span>
+                <span id="coins" class="font-black text-yellow-300 text-base">0</span>
+            </div>
+        </div>
+
+        <div class="relative w-full aspect-[360/500] bg-sky-300 rounded-2xl overflow-hidden border-4 border-slate-900 shadow-2xl">
+            <canvas id="game" width="360" height="500" class="w-full h-full block"></canvas>
+            
+            <!-- Dynamic Floating Joke Banners -->
+            <div id="floatText" class="absolute top-12 left-0 right-0 text-center pointer-events-none z-20 hidden">
+                <span id="floatTextContent" class="inline-block px-4 py-1.5 bg-rose-600 text-white font-black text-sm rounded-full border-2 border-slate-900 shadow-xl animate-bounce">
+                    يا ساتر يا رب! 😱
+                </span>
+            </div>
+
+            <!-- Start & Game Over Screen Overlay -->
+            <div id="overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center z-30 transition-all duration-300">
+                
+                <div class="relative mb-3">
+                    <img id="avatarPreview" src="https://i.ibb.co/GvBL19VG/character.png" alt="أحمد حجاج" class="w-24 h-24 rounded-full border-4 border-amber-400 object-cover shadow-2xl animate-wiggle bg-amber-200" onerror="this.src='https://placehold.co/100x100/ffcc00/000000?text=حجاج'">
+                    <span class="absolute -bottom-2 -right-2 bg-rose-500 text-white text-xs font-black px-2 py-0.5 rounded-full border border-slate-900">حجاج 🏎️</span>
+                </div>
+
+                <h2 id="overlayTitle" class="text-2xl font-black text-amber-400 mb-1 leading-tight">مستعد يا حجاج للسباق؟ 😎</h2>
+                <p id="overlayDesc" class="text-slate-300 text-xs font-bold mb-4 max-w-xs leading-relaxed">
+                    حاسب المطبات والتوك توك والمفتشين! واجمع الشاي والسندوتشات عشان تفتح النيترو! 🚀
+                </p>
+
+                <!-- Certificates & Stats Container for Game Over -->
+                <div id="certContainer" class="hidden w-full max-w-xs bg-amber-100 dark:bg-slate-900 text-slate-900 dark:text-white p-3 rounded-2xl border-4 border-rose-500 mb-4 text-center shadow-lg">
+                    <span class="text-[10px] font-black bg-rose-500 text-white px-2 py-0.5 rounded-full">شهادة تقدير رسمية 📜</span>
+                    <h3 class="font-black text-base text-rose-600 dark:text-rose-400 mt-1">"أفشل سواق في المنطقة"</h3>
+                    <p id="certScore" class="text-xs font-bold text-slate-700 dark:text-slate-300">جمعت 0 كوباية شاي وخبطت في أول مطب!</p>
+                </div>
+
+                <button onclick="startGame()" class="w-full max-w-xs py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl border-4 border-slate-900 btn-pop text-base flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-flag-checkered text-xl"></i>
+                    <span id="startBtnText">إبدأ التحفيل والسباق 🚀</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-slate-900 border-4 border-slate-900 rounded-2xl p-3 shadow-xl space-y-2.5">
+            <div id="message" class="text-center text-xs font-black text-amber-300 bg-slate-800 py-2 px-3 rounded-xl border border-slate-700">
+                شجع حجاج: "حاسب يا حجاج الشجرة!" 😂
+            </div>
+
+            <!-- Touch / Screen Controls -->
+            <div class="grid grid-cols-3 gap-2">
+                <button id="leftBtn" class="py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-2xl rounded-xl border-2 border-slate-900 btn-pop flex items-center justify-center">
+                    ➡️ يمين
+                </button>
+                <button id="nitroBtn" onclick="activateNitro()" class="py-3 bg-rose-600 hover:bg-rose-500 text-white font-black text-sm rounded-xl border-2 border-slate-900 btn-nitro flex flex-col items-center justify-center leading-none">
+                    <span class="text-lg">💥</span>
+                    <span class="text-[10px] mt-0.5">دوس جاز!</span>
+                </button>
+                <button id="rightBtn" class="py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-2xl rounded-xl border-2 border-slate-900 btn-pop flex items-center justify-center">
+                    شمال ⬅️
+                </button>
+            </div>
+
+            <!-- Funny Expression Switches -->
+            <div class="flex items-center justify-between bg-slate-800 p-2 rounded-xl border border-slate-700">
+                <span class="text-[11px] font-bold text-slate-300">تعبير حجاج:</span>
+                <div class="flex gap-1.5">
+                    <button onclick="setExpression('normal')" class="px-2 py-1 bg-slate-700 text-xs rounded-lg hover:bg-amber-500 hover:text-slate-900 font-bold">🙂 عادي</button>
+                    <button onclick="setExpression('laugh')" class="px-2 py-1 bg-slate-700 text-xs rounded-lg hover:bg-amber-500 hover:text-slate-900 font-bold">😂 يضحك</button>
+                    <button onclick="setExpression('shock')" class="px-2 py-1 bg-slate-700 text-xs rounded-lg hover:bg-amber-500 hover:text-slate-900 font-bold">😱 يصرخ</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="configModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-4 border-amber-400 rounded-3xl p-5 max-w-sm w-full shadow-2xl space-y-4 text-right">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-black text-sm flex items-center gap-2 text-amber-400">
+                    <i class="fa-solid fa-image"></i> تغيير صورة حجاج الكوميدية
+                </h3>
+                <button onclick="closeConfigModal()" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-rose-500 transition border border-slate-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-300 mb-1">ضع رابط صورة أحمد حجاج (أو صورتك):</label>
+                    <input type="text" id="imageUrlInput" value="https://i.ibb.co/GvBL19VG/character.png" placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-slate-950 border-2 border-slate-700 text-xs text-amber-300 focus:outline-none focus:border-amber-400 dir-ltr text-left">
+                </div>
+
+                <div class="text-center font-bold text-xs text-slate-400">أو اختر صورة جاهزة:</div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="presetImage('https://i.ibb.co/GvBL19VG/character.png')" class="p-2 bg-slate-800 hover:bg-amber-500/20 rounded-xl border border-slate-700 text-center text-xs font-bold text-amber-300">
+                        🏎️ حجاج الممتع
+                    </button>
+                    <button onclick="presetImage('https://placehold.co/120x120/ff4757/ffffff?text=😱')" class="p-2 bg-slate-800 hover:bg-amber-500/20 rounded-xl border border-slate-700 text-center text-xs font-bold text-rose-400">
+                        😱 حجاج المصدوم
+                    </button>
+                    <button onclick="presetImage('https://placehold.co/120x120/2ed573/ffffff?text=😎')" class="p-2 bg-slate-800 hover:bg-amber-500/20 rounded-xl border border-slate-700 text-center text-xs font-bold text-emerald-400">
+                        😎 حجاج الأسطورة
+                    </button>
+                </div>
+
+                <button onclick="saveCustomImage()" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl border-2 border-slate-900 btn-pop text-xs">
+                    حفظ وتطبيق الصورة 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sound Engine Using Web Audio API (No External Files Required)
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let soundEnabled = true;
+
+        function initAudio() {
+            if(!audioCtx) audioCtx = new AudioCtx();
+        }
+
+        function playBeep(freq, type, duration, vol=0.1) {
+            if(!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function playCrashSound() {
+            playBeep(120, 'sawtooth', 0.4, 0.2);
+            setTimeout(() => playBeep(80, 'square', 0.3, 0.2), 100);
+        }
+
+        function playCoinSound() {
+            playBeep(600, 'sine', 0.1, 0.15);
+            setTimeout(() => playBeep(900, 'sine', 0.15, 0.15), 80);
+        }
+
+        function playNitroSound() {
+            playBeep(300, 'sawtooth', 0.5, 0.2);
+            setTimeout(() => playBeep(500, 'triangle', 0.4, 0.2), 150);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById("soundIcon").className = soundEnabled ? "fa-solid fa-volume-high" : "fa-solid fa-volume-xmark text-rose-500";
+        }
+
+        // Modal & Image Configuration
+        function openConfigModal() { document.getElementById('configModal').classList.remove('hidden'); }
+        function closeConfigModal() { document.getElementById('configModal').classList.add('hidden'); }
+        function presetImage(url) {
+            document.getElementById('imageUrlInput').value = url;
+            saveCustomImage();
+        }
+
+        // Canvas & Game Variables
+        const canvas = document.getElementById("game");
+        const ctx = canvas.getContext("2d");
+        const $ = id => document.getElementById(id);
+
+        const W = 360, H = 500;
+        const lanes = [80, 180, 280];
+
+        let hajajImg = new Image();
+        hajajImg.crossOrigin = "anonymous";
+        let imgLoaded = false;
+
+        function loadAvatar(url) {
+            imgLoaded = false;
+            hajajImg.src = url;
+            hajajImg.onload = () => {
+                imgLoaded = true;
+                $("avatarPreview").src = url;
+            };
+            hajajImg.onerror = () => {
+                imgLoaded = false;
+                $("avatarPreview").src = 'https://placehold.co/100x100/ffcc00/000000?text=حجاج';
+            };
+        }
+        loadAvatar("https://i.ibb.co/GvBL19VG/character.png");
+
+        function saveCustomImage() {
+            const url = $("imageUrlInput").value;
+            if(url) {
+                loadAvatar(url);
+                closeConfigModal();
+            }
+        }
+
+        // Funny Comments List
+        const funnyComments = [
+            "حاسب يا حجاج الشجرة! 🌳",
+            "وسع للأسطورة اللي هيخبط القمع! 🚨",
+            "أحمد حجاج طار في الهواء! 🚀",
+            "سواق الهوا بأصوله! 😂",
+            "مين اللي ادالك الرخصة دي؟ 📜",
+            "يا ساتر يا رب على الغرزة! 🏎️",
+            "حجاج بياخد الغرزة عالضيق! 🔥"
+        ];
+
+        const funnyFloatTexts = [
+            "يا لهوي! 😱",
+            "طرررر! 💥",
+            "فين الفرامل؟ 🛑",
+            "بوم! 💣",
+            "حاسب المطب! 🚧",
+            "احلى كوباية شاي! ☕"
+        ];
+
+        let lane = 1, objects = [];
+        let score = 0, coins = 0, lives = 3;
+        let highScore = localStorage.getItem('hajajHighScore') || 0;
+        $("highScore").textContent = highScore;
+
+        let active = false, frame = 0, road = 0, last = 0;
+        let animation = 0;
+        let particles = [];
+        let nitroTime = 0;
+        let currentExpression = 'normal'; // 'normal', 'laugh', 'shock'
+
+        function setExpression(expr) {
+            currentExpression = expr;
+            setTimeout(() => { currentExpression = 'normal'; }, 2000);
+        }
+
+        function showFloatText(text) {
+            const el = $("floatText");
+            $("floatTextContent").textContent = text;
+            el.classList.remove('hidden');
+            setTimeout(() => { el.classList.add('hidden'); }, 1200);
+        }
+
+        function updateUI() {
+            $("score").textContent = Math.floor(score);
+            $("coins").textContent = coins;
+            $("lives").textContent = lives;
+            $("highScore").textContent = highScore;
+        }
+
+        function resetGame() {
+            active = false;
+            cancelAnimationFrame(animation);
+            lane = 1; objects = []; score = 0; coins = 0; lives = 3;
+            frame = 0; road = 0; last = 0; particles = []; nitroTime = 0;
+            updateUI();
+            draw();
+            $("certContainer").classList.add('hidden');
+            $("overlayTitle").textContent = "جاهز للسباق يا حجاج؟ 😎";
+            $("overlayDesc").textContent = "حاسب المطبات والتوك توك واجمع كوبايات الشاي!";
+            $("startBtnText").textContent = "إبدأ السباق 🚀";
+            $("overlay").classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function startGame() {
+            if(active) return;
+            initAudio();
+            if(lives <= 0) resetGame();
+            active = true;
+            $("overlay").classList.add('opacity-0', 'pointer-events-none');
+            $("message").textContent = funnyComments[Math.floor(Math.random() * funnyComments.length)];
+            last = performance.now();
+            animation = requestAnimationFrame(loop);
+        }
+
+        function move(n) {
+            if(!active) return;
+            lane = Math.max(0, Math.min(2, lane + n));
+            playBeep(400, 'sine', 0.05, 0.1);
+        }
+
+        function activateNitro() {
+            if(!active) return;
+            if(coins >= 3 || nitroTime > 0) {
+                if(nitroTime <= 0) coins -= 3;
+                nitroTime = 120; // 2 seconds at 60fps
+                playNitroSound();
+                setExpression('laugh');
+                showFloatText("🚀 نيتروووو يا حجاج!");
+                $("message").textContent = "أحمد حجاج طار في الهواء! 🚀💨";
+            } else {
+                showFloatText("مفيش شاي كافي للنيترو! ☕");
+            }
+        }
+
+        // Controls Binding
+        $("leftBtn").onclick = () => move(-1);
+        $("rightBtn").onclick = () => move(1);
+
+        document.addEventListener("keydown", e => {
+            if(e.key === "ArrowLeft" || e.key === "a") move(-1);
+            if(e.key === "ArrowRight" || e.key === "d") move(1);
+            if(e.code === "Space") activateNitro();
+        });
+
+        // Touch Swipe Handling
+        let touchStart = 0;
+        canvas.addEventListener("touchstart", e => {
+            touchStart = e.changedTouches[0].clientX;
+        }, {passive: true});
+        canvas.addEventListener("touchend", e => {
+            const dx = e.changedTouches[0].clientX - touchStart;
+            if(Math.abs(dx) > 20) move(dx > 0 ? 1 : -1);
+        }, {passive: true});
+
+        function addParticles(x, y, color) {
+            for(let i = 0; i < 10; i++) {
+                particles.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 5 + 3,
+                    color: color,
+                    life: 25
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+
+            // Sky / Ground Background
+            let sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, nitroTime > 0 ? "#7c3aed" : "#38bdf8");
+            sky.addColorStop(1, nitroTime > 0 ? "#c084fc" : "#bae6fd");
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // Side Grass / Sidewalk
+            ctx.fillStyle = nitroTime > 0 ? "#4c1d95" : "#22c55e";
+            ctx.fillRect(0, 0, 35, H);
+            ctx.fillRect(325, 0, 35, H);
+
+            // Road Asphalt
+            ctx.fillStyle = "#1e293b";
+            ctx.fillRect(35, 0, 290, H);
+
+            // Side Lines
+            for(let y = -30 + (road % 40); y < H; y += 40) {
+                ctx.fillStyle = "#facc15";
+                ctx.fillRect(36, y, 6, 22);
+                ctx.fillRect(318, y, 6, 22);
+            }
+
+            // Lane Divider Dashes
+            for(let y = -40 + (road % 70); y < H; y += 70) {
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(130, y, 5, 35);
+                ctx.fillRect(225, y, 5, 35);
+            }
+
+            // Render Particles
+            for(let p of particles) {
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Render Objects (Obstacles & Items)
+            objects.forEach(o => {
+                ctx.font = "32px Cairo, Arial";
+                ctx.textAlign = "center";
+                if(o.type === "tea") {
+                    ctx.fillText("☕", o.x, o.y + 10);
+                } else if(o.type === "ful") {
+                    ctx.fillText("🥪", o.x, o.y + 10);
+                } else if(o.type === "toktok") {
+                    ctx.fillText("🛺", o.x, o.y + 10);
+                } else if(o.type === "bump") {
+                    ctx.fillText("🚧", o.x, o.y + 10);
+                } else if(o.type === "melon") {
+                    ctx.fillText("🍉", o.x, o.y + 10);
+                } else {
+                    ctx.fillText("🚕", o.x, o.y + 10);
+                }
+            });
+
+            // Player Render - Hajaj Character Car
+            const px = lanes[lane];
+            const py = H - 65;
+
+            // Tilt & Shake animation logic
+            const tilt = Math.sin(frame * 0.3) * (nitroTime > 0 ? 0.25 : 0.08);
+
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(tilt);
+
+            // Nitro aura effect
+            if(nitroTime > 0) {
+                ctx.fillStyle = "rgba(244, 63, 94, 0.4)";
+                ctx.beginPath();
+                ctx.arc(0, 0, 38, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw Hajaj Car Base Body
+            ctx.fillStyle = "#e11d48";
+            ctx.beginPath();
+            ctx.roundRect(-24, -30, 48, 65, 12);
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#0f172a";
+            ctx.stroke();
+
+            // Wheels
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(-28, -25, 6, 16);
+            ctx.fillRect(22, -25, 6, 16);
+            ctx.fillRect(-28, 12, 6, 16);
+            ctx.fillRect(22, 12, 6, 16);
+
+            // Windshield / Avatar Picture
+            if(imgLoaded) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(0, -5, 20, 0, Math.PI * 2);
+                ctx.clip();
+                ctx.drawImage(hajajImg, -20, -25, 40, 40);
+                ctx.restore();
+                ctx.strokeStyle = "#fbbf24";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, -5, 20, 0, Math.PI * 2);
+                ctx.stroke();
+            } else {
+                ctx.font = "26px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(currentExpression === 'shock' ? "😱" : (currentExpression === 'laugh' ? "😂" : "🤪"), 0, 5);
+            }
+
+            // Overlay Face Expression Badge
+            ctx.font = "16px Arial";
+            ctx.fillText(currentExpression === 'shock' ? "😱" : (currentExpression === 'laugh' ? "😂" : "😎"), 14, -18);
+
+            ctx.restore();
+        }
+
+        // Obstacle Spawner
+        function spawn() {
+            const rand = Math.random();
+            let itemType = "car";
+
+            if(rand < 0.25) itemType = "tea";
+            else if(rand < 0.4) itemType = "ful";
+            else if(rand < 0.6) itemType = "toktok";
+            else if(rand < 0.75) itemType = "bump";
+            else if(rand < 0.85) itemType = "melon";
+
+            objects.push({
+                x: lanes[Math.floor(Math.random() * 3)],
+                y: -35,
+                type: itemType,
+                hit: false
+            });
+        }
+
+        // Game Over & Certificate Logic
+        function endGame() {
+            active = false;
+            playCrashSound();
+            if(score > highScore) {
+                highScore = Math.floor(score);
+                localStorage.setItem('hajajHighScore', highScore);
+            }
+
+            $("certScore").textContent = `جمعت ${coins} كوباية شاي وسجلت ${Math.floor(score)} نقطة قبل ما تخبط!`;
+            $("certContainer").classList.remove('hidden');
+            $("overlayTitle").textContent = "أحمد حجاج خبط وخسر! 😂";
+            $("overlayDesc").textContent = funnyFloatTexts[Math.floor(Math.random() * funnyFloatTexts.length)];
+            $("startBtnText").textContent = "العب تاني يا بطل 🔁";
+            $("overlay").classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function update(dt) {
+            frame += dt;
+            const speedMultiplier = nitroTime > 0 ? 2.2 : 1.0;
+            road = (road + (6 * speedMultiplier) * dt) % 70;
+            score += 0.2 * speedMultiplier * dt;
+
+            if(nitroTime > 0) nitroTime -= dt;
+
+            // Update particles
+            for(let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                if(p.life <= 0) particles.splice(i, 1);
+            }
+
+            if(frame > Math.max(16, 38 - frame / 150)) {
+                spawn();
+                frame = 0;
+            }
+
+            for(const o of objects) {
+                o.y += (4.8 * speedMultiplier) * dt;
+
+                const hit = Math.abs(o.x - lanes[lane]) < 32 &&
+                            Math.abs(o.y - (H - 65)) < 35;
+
+                if(hit && !o.hit) {
+                    o.hit = true;
+                    if(o.type === "tea" || o.type === "ful") {
+                        coins += o.type === "tea" ? 1 : 2;
+                        score += 35;
+                        playCoinSound();
+                        setExpression('laugh');
+                        addParticles(o.x, o.y, "#facc15");
+                        showFloatText(o.type === "tea" ? "احلى كوباية شاي! ☕" : "سندوتش فول عالماشى! 🥪");
+                    } else {
+                        if(nitroTime > 0) {
+                            // Destroy obstacles during Nitro
+                            score += 50;
+                            addParticles(o.x, o.y, "#f43f5e");
+                            showFloatText("دمرت العائق! 💣");
+                        } else {
+                            lives--;
+                            score = Math.max(0, score - 20);
+                            playCrashSound();
+                            setExpression('shock');
+                            addParticles(lanes[lane], H - 65, "#f43f5e");
+                            showFloatText(funnyFloatTexts[Math.floor(Math.random() * funnyFloatTexts.length)]);
+                            
+                            if(lives <= 0) {
+                                updateUI();
+                                draw();
+                                endGame();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            objects = objects.filter(o => o.y < H + 40 && !o.hit);
+            
+            // Random funny comment updater
+            if(Math.random() < 0.005) {
+                $("message").textContent = funnyComments[Math.floor(Math.random() * funnyComments.length)];
+            }
+
+            updateUI();
+        }
+
+        function loop(now) {
+            if(!active) return;
+            const dt = Math.min((now - last) / 16.67, 2);
+            last = now;
+            update(dt);
+            draw();
+            if(active) animation = requestAnimationFrame(loop);
+        }
+
+        draw();
+        updateUI();
+    </script>
+</body>
+</html>
